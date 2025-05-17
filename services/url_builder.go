@@ -31,6 +31,8 @@ type URLBuilder struct {
 	sd                *Subdomains
 	cm                *CacheMap
 	domain            string
+	clientId          string
+	clientSecret      string
 	apiSecret         string
 	apiKey            string
 	apiRole           string
@@ -44,6 +46,8 @@ func NewURLBuilder(c *cli.Context, sd *Subdomains, cm *CacheMap) *URLBuilder {
 		sd:                sd,
 		cm:                cm,
 		domain:            c.String(exportDomainFlag),
+		clientId:          c.String(exportClientId),
+		clientSecret:      c.String(exportClientSecret),
 		apiKey:            c.String(exportApiKeyFlag),
 		apiSecret:         c.String(exportApiSecretFlag),
 		apiRole:           c.String(exportApiRoleFlag),
@@ -61,6 +65,8 @@ func (s *URLBuilder) Build(r *Resource, i *ListItem, g ParamGetter, et ExportTyp
 		i:                 i,
 		g:                 g,
 		domain:            s.domain,
+		clientId:          s.clientId,
+		clientSecret:      s.clientSecret,
 		apiKey:            s.apiKey,
 		apiSecret:         s.apiSecret,
 		apiRole:           s.apiRole,
@@ -107,6 +113,8 @@ type BaseURLBuilder struct {
 	i                 *ListItem
 	g                 ParamGetter
 	domain            string
+	clientId          string
+	clientSecret      string
 	apiSecret         string
 	apiKey            string
 	apiRole           string
@@ -259,6 +267,14 @@ func (s *BaseURLBuilder) BuildBaseURL(i *MyURL) (u *MyURL, err error) {
 	requestID := s.getRequestID()
 	if requestID != "" {
 		q.Add("request-id", requestID)
+	}
+	clientId := s.clientId
+	if clientId != "" {
+		q.Add("CF-Access-Client-Id", clientId)
+	}
+	clientSecret := s.clientSecret
+	if clientSecret != "" {
+		q.Add("CF-Access-Client-Secret", clientSecret)
 	}
 	u.RawQuery = q.Encode()
 	cached, err := s.cm.Get(u)

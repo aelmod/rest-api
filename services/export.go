@@ -15,6 +15,8 @@ const (
 	exportApiSecretFlag         = "export-api-secret"
 	exportApiRoleFlag           = "export-api-role"
 	exportPathPrefixFlag        = "export-path-prefix"
+	exportClientId              = "export-client-id"
+	exportClientSecret          = "export-client-secret"
 )
 
 const (
@@ -81,6 +83,18 @@ func RegisterExportFlags(f []cli.Flag) []cli.Flag {
 			Usage:  "export path prefix",
 			EnvVar: "EXPORT_PATH_PREFIX",
 			Value:  "/",
+		},
+		cli.StringFlag{
+			Name:   exportClientId,
+			Usage:  "export client id",
+			Value:  "",
+			EnvVar: "EXPORT_CLIENT_ID",
+		},
+		cli.StringFlag{
+			Name:   exportClientSecret,
+			Usage:  "export client secret",
+			Value:  "",
+			EnvVar: "EXPORT_CLIENT_SECRET",
 		},
 	)
 }
